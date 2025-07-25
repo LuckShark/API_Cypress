@@ -5,10 +5,7 @@ describe('Testes de API para o endpoint /posts', () => {
 //-------------TESTES APENAS COM GET
 
  it('Deve retornar uma lista de posts com validações avançadas (GET)', () => {
-  cy.request({
-    method: 'GET',
-    url: 'https://jsonplaceholder.typicode.com/posts',
-  }).then((response) => {
+  cy.request('GET', '/posts').then((response) => {
     // Validação do Status Code
     expect(response.status).to.eq(200);
 
@@ -33,7 +30,7 @@ describe('Testes de API para o endpoint /posts', () => {
   it('Deve retornar um post específico com sucesso (GET)', () => {
     const postId = 1;
     // Faz a requisição GET para um post específico
-    cy.request('GET', `https://jsonplaceholder.typicode.com/posts/${postId}`).then((response) => {
+    cy.request('GET', `/posts/${postId}`).then((response) => {
       // Valida o status code
       expect(response.status).to.eq(200);
       
