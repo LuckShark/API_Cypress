@@ -1,0 +1,181 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-07-25T18:30:44.084Z",
+    "end": "2025-07-25T18:30:46.088Z",
+    "duration": 2004,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "da42d37d-1138-407c-8eae-ac8fca0ec994",
+      "title": "",
+      "fullFile": "cypress\\e2e\\api_posts.cy.js",
+      "file": "cypress\\e2e\\api_posts.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "7e4dffd7-1ce9-495b-bde3-d4a2fe027f77",
+          "title": "Testes de API para o endpoint /posts",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Deve retornar uma lista de posts com validações avançadas (GET)",
+              "fullTitle": "Testes de API para o endpoint /posts Deve retornar uma lista de posts com validações avançadas (GET)",
+              "timedOut": null,
+              "duration": 505,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.request('GET', '/posts').then(response => {\n  // Validação do Status Code\n  expect(response.status).to.eq(200);\n  // Validação de Headers\n  // Verifica se o cabeçalho 'content-type' existe e contém 'application/json'\n  expect(response.headers['content-type']).to.include('application/json');\n  // Validação do Corpo (Body)\n  expect(response.body).to.be.an('array');\n  expect(response.body).to.have.length(100); // A API de exemplo retorna 100 posts\n  // Validação da estrutura de um item na lista\n  // Verifica se o primeiro post no array tem as propriedades esperadas e os tipos corretos\n  const firstPost = response.body[0];\n  expect(firstPost).to.have.property('userId').and.to.be.a('number');\n  expect(firstPost).to.have.property('id').and.to.be.a('number');\n  expect(firstPost).to.have.property('title').and.to.be.a('string');\n  expect(firstPost).to.have.property('body').and.to.be.a('string');\n});",
+              "err": {},
+              "uuid": "7796c690-9032-4450-8a6d-277b92c43d25",
+              "parentUUID": "7e4dffd7-1ce9-495b-bde3-d4a2fe027f77",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve retornar um post específico com sucesso (GET)",
+              "fullTitle": "Testes de API para o endpoint /posts Deve retornar um post específico com sucesso (GET)",
+              "timedOut": null,
+              "duration": 136,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const postId = 1;\n// Faz a requisição GET para um post específico\ncy.request('GET', `/posts/${postId}`).then(response => {\n  // Valida o status code\n  expect(response.status).to.eq(200);\n  // Valida se o corpo da resposta é um objeto\n  expect(response.body).to.be.an('object');\n  // Valida se o post retornado tem o ID correto\n  expect(response.body).to.have.property('id', postId);\n});",
+              "err": {},
+              "uuid": "a2076cec-4eff-455c-81f6-201b59af82e9",
+              "parentUUID": "7e4dffd7-1ce9-495b-bde3-d4a2fe027f77",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve criar um novo post usando um fixture (POST)",
+              "fullTitle": "Testes de API para o endpoint /posts Deve criar um novo post usando um fixture (POST)",
+              "timedOut": null,
+              "duration": 497,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "// Carrega os dados do arquivo fixture\ncy.fixture('new_post').then(postData => {\n  // Faz a requisição POST usando os dados do fixtur\n  cy.request('POST', '/posts', postData).then(response => {\n    expect(response.status).to.eq(201);\n    expect(response.body).to.have.property('title', postData.title);\n    expect(response.body).to.have.property('body', postData.body);\n    expect(response.body).to.have.property('userId', postData.userId);\n    expect(response.body).to.have.property('id');\n  });\n});",
+              "err": {},
+              "uuid": "3e6775a1-fed3-4e05-a515-77caf9287306",
+              "parentUUID": "7e4dffd7-1ce9-495b-bde3-d4a2fe027f77",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve atualizar um post existente com sucesso (PUT)",
+              "fullTitle": "Testes de API para o endpoint /posts Deve atualizar um post existente com sucesso (PUT)",
+              "timedOut": null,
+              "duration": 287,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const postId = 5;\nconst updatedPost = {\n  id: postId,\n  title: 'Post Atualizado',\n  body: 'O conteúdo deste post foi totalmente atualizado.',\n  userId: 1\n};\n// Faz a requisição PUT para o post com ID 5\ncy.request('PUT', `https://jsonplaceholder.typicode.com/posts/${postId}`, updatedPost).then(response => {\n  // Valida o status code de sucesso\n  expect(response.status).to.eq(200);\n  // Valida se os dados na resposta correspondem aos dados enviados\n  expect(response.body).to.deep.equal(updatedPost);\n});",
+              "err": {},
+              "uuid": "ed7cce88-5dc0-44d1-9ae8-f7db80f98c11",
+              "parentUUID": "7e4dffd7-1ce9-495b-bde3-d4a2fe027f77",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Deve deletar um post com sucesso (DELETE)",
+              "fullTitle": "Testes de API para o endpoint /posts Deve deletar um post com sucesso (DELETE)",
+              "timedOut": null,
+              "duration": 500,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const postId = 10;\n// Faz a requisição DELETE\ncy.request('DELETE', `https://jsonplaceholder.typicode.com/posts/${postId}`).then(response => {\n  // Uma deleção bem-sucedida geralmente retorna 200 (OK) ou 204 (No Content)\n  // A API JSONPlaceholder retorna 200\n  expect(response.status).to.eq(200);\n  // O corpo da resposta para um DELETE bem-sucedido pode estar vazio\n  expect(response.body).to.be.empty;\n});",
+              "err": {},
+              "uuid": "feb10f11-222d-4246-9a6e-a090a3409bc4",
+              "parentUUID": "7e4dffd7-1ce9-495b-bde3-d4a2fe027f77",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "7796c690-9032-4450-8a6d-277b92c43d25",
+            "a2076cec-4eff-455c-81f6-201b59af82e9",
+            "3e6775a1-fed3-4e05-a515-77caf9287306",
+            "ed7cce88-5dc0-44d1-9ae8-f7db80f98c11",
+            "feb10f11-222d-4246-9a6e-a090a3409bc4"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1925,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/mochawesome",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
