@@ -1,0 +1,24 @@
+# node_modules não deve ser versionado
+node_modules/
+
+# arquivos temporários
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# pastas geradas automaticamente pelo Cypress
+cypress/downloads/
+cypress/screenshots/
+cypress/videos/
+
+# ambiente/segurança (se usar)
+.env
+.env.*
+
+# sistema operacional
+.DS_Store
+Thumbs.db
+
+# VSCode settings
+.vscode/
