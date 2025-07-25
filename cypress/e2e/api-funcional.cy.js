@@ -34,7 +34,7 @@ describe('Testes reais com API CRUDCRUD (posts)', () => {
   it('Deve atualizar um post (PUT)', () => {
     const updatedPost = {
       title: 'Post atualizado via PUT',
-      content: 'Agora com conteúdo new',
+      content: 'Agora com conteúdo new - TESTANDO ACTIONS',
     };
 
     cy.request('PUT', `${BASE_URL}/${createdId}`, updatedPost).then((response) => {
@@ -48,3 +48,6 @@ describe('Testes reais com API CRUDCRUD (posts)', () => {
     });
   });
 });
+
+
+//testando o github actions pipe
