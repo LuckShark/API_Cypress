@@ -58,5 +58,42 @@ it('Deve criar um novo post com sucesso (POST)', () => {
   });
 });
 
+//-------------TESTES APENAS COM PUT
+
+it('Deve atualizar um post existente com sucesso (PUT)', () => {
+  const postId = 5;
+  const updatedPost = {
+    id: postId,
+    title: 'Post Atualizado',
+    body: 'O conteúdo deste post foi totalmente atualizado.',
+    userId: 1,
+  };
+
+  // Faz a requisição PUT para o post com ID 5
+  cy.request('PUT', `https://jsonplaceholder.typicode.com/posts/${postId}`, updatedPost).then((response) => {
+    // Valida o status code de sucesso
+    expect(response.status).to.eq(200);
+    
+    // Valida se os dados na resposta correspondem aos dados enviados
+    expect(response.body).to.deep.equal(updatedPost);
+  });
+});
+
+//-------------TESTES APENAS COM DELETE
+
+it('Deve deletar um post com sucesso (DELETE)', () => {
+  const postId = 10;
+
+  // Faz a requisição DELETE
+  cy.request('DELETE', `https://jsonplaceholder.typicode.com/posts/${postId}`).then((response) => {
+    // Uma deleção bem-sucedida geralmente retorna 200 (OK) ou 204 (No Content)
+    // A API JSONPlaceholder retorna 200
+    expect(response.status).to.eq(200);
+    
+    // O corpo da resposta para um DELETE bem-sucedido pode estar vazio
+    expect(response.body).to.be.empty;
+  });
+});
+
 
 });
