@@ -1,0 +1,5 @@
+{
+  "title": "Post Criado via Fixture",
+  "body": "Este payload de teste foi carregado de um arquivo fixture.",
+  "userId": 5
+}

@@ -44,26 +44,17 @@ describe('Testes de API para o endpoint /posts', () => {
 
 //-------------TESTES APENAS COM POST
 
-it('Deve criar um novo post com sucesso (POST)', () => {
-  // Define o corpo da requisição para o novo post
-  const newPost = {
-    title: 'Meu Novo Post Incrível',
-    body: 'Este é o conteúdo do meu post, criado via automação Cypress.',
-    userId: 1,
-  };
-
-  // Faz a requisição POST
-  cy.request('POST', 'https://jsonplaceholder.typicode.com/posts', newPost).then((response) => {
-    // Um recurso criado com sucesso geralmente retorna o status 201
-    expect(response.status).to.eq(201);
-    
-    // Valida se o corpo da resposta contém os dados enviados, mais um ID gerado
-    expect(response.body).to.have.property('title', newPost.title);
-    expect(response.body).to.have.property('body', newPost.body);
-    expect(response.body).to.have.property('userId', newPost.userId);
-    
-    // Valida que o novo post recebeu um ID
-    expect(response.body).to.have.property('id');
+it('Deve criar um novo post usando um fixture (POST)', () => {
+  // Carrega os dados do arquivo fixture
+  cy.fixture('new_post').then((postData) => {
+    // Faz a requisição POST usando os dados do fixture
+    cy.request('POST', '/posts', postData).then((response) => {
+      expect(response.status).to.eq(201);
+      expect(response.body).to.have.property('title', postData.title);
+      expect(response.body).to.have.property('body', postData.body);
+      expect(response.body).to.have.property('userId', postData.userId);
+      expect(response.body).to.have.property('id');
+    });
   });
 });
 
