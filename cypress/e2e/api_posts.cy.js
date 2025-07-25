@@ -47,7 +47,7 @@ describe('Testes de API para o endpoint /posts', () => {
 it('Deve criar um novo post usando um fixture (POST)', () => {
   // Carrega os dados do arquivo fixture
   cy.fixture('new_post').then((postData) => {
-    // Faz a requisição POST usando os dados do fixture
+    // Faz a requisição POST usando os dados do fixtur
     cy.request('POST', '/posts', postData).then((response) => {
       expect(response.status).to.eq(201);
       expect(response.body).to.have.property('title', postData.title);
