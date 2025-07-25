@@ -1,0 +1,60 @@
+#.github/workflows/main.yml
+
+name: Pipeline de Testes de API com Cypress
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cypress-api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Faz o checkout do código do repositório
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Instala Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 3. Instala as dependências do projeto, incluindo o Cypress
+      # O cache é gerenciado pela ação setup-node para acelerar as execuções futuras
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Instala as dependências para o relatório Mochawesome
+      - name: Install Mochawesome reporter dependencies
+        run: npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
+
+      # 5. Executa os testes de API do Cypress
+      # O reporter Mochawesome irá gerar arquivos JSON individuais para cada suíte de teste
+      - name: Run Cypress API tests
+        run: npx cypress run --spec "cypress/e2e/api_posts.cy.js" --reporter mochawesome --reporter-options "reportDir=cypress/reports/mochawesome,overwrite=false,html=false,json=true"
+        # 'continue-on-error: true' garante que os passos seguintes (geração de relatório) executem mesmo se os testes falharem
+        continue-on-error: true
+
+      # 6. Combina os relatórios JSON em um único arquivo
+      - name: Merge Mochawesome reports
+        run: npx mochawesome-merge "cypress/reports/mochawesome/*.json" > cypress/reports/report.json
+
+      # 7. Gera o relatório HTML a partir do JSON combinado
+      - name: Generate HTML report
+        run: npx marge cypress/reports/report.json -f report -o cypress/reports
+        # 'if: always()' garante que este passo sempre execute, para que tenhamos um relatório mesmo em caso de falhas
+        if: always()
+
+      # 8. Publica o relatório HTML como um artefato do build
+      # O relatório ficará disponível para download na página de resumo do workflow
+      - name: Upload test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-api-test-report
+          path: cypress/reports/report.html
+        # 'if: always()' garante que o artefato seja sempre publicado
+        if: always()
