@@ -4,19 +4,31 @@ describe('Testes de API para o endpoint /posts', () => {
 
 //-------------TESTES APENAS COM GET
 
-  it('Deve retornar uma lista de posts com sucesso (GET)', () => {
-    // Faz a requisição GET para o endpoint /posts
-    cy.request('GET', 'https://jsonplaceholder.typicode.com/posts').then((response) => {
-      // Valida se a requisição foi bem-sucedida (status code 200)
-      expect(response.status).to.eq(200);
-      
-      // Valida se o corpo da resposta é um array
-      expect(response.body).to.be.an('array');
-      
-      // Valida se o array não está vazio
-      expect(response.body).to.have.length.greaterThan(0);
-    });
+ it('Deve retornar uma lista de posts com validações avançadas (GET)', () => {
+  cy.request({
+    method: 'GET',
+    url: 'https://jsonplaceholder.typicode.com/posts',
+  }).then((response) => {
+    // Validação do Status Code
+    expect(response.status).to.eq(200);
+
+    // Validação de Headers
+    // Verifica se o cabeçalho 'content-type' existe e contém 'application/json'
+    expect(response.headers['content-type']).to.include('application/json');
+
+    // Validação do Corpo (Body)
+    expect(response.body).to.be.an('array');
+    expect(response.body).to.have.length(100); // A API de exemplo retorna 100 posts
+
+    // Validação da estrutura de um item na lista
+    // Verifica se o primeiro post no array tem as propriedades esperadas e os tipos corretos
+    const firstPost = response.body[0];
+    expect(firstPost).to.have.property('userId').and.to.be.a('number');
+    expect(firstPost).to.have.property('id').and.to.be.a('number');
+    expect(firstPost).to.have.property('title').and.to.be.a('string');
+    expect(firstPost).to.have.property('body').and.to.be.a('string');
   });
+});
 
   it('Deve retornar um post específico com sucesso (GET)', () => {
     const postId = 1;
