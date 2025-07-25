@@ -34,7 +34,7 @@ describe('Testes reais com API CRUDCRUD (posts)', () => {
   it('Deve atualizar um post (PUT)', () => {
     const updatedPost = {
       title: 'Post atualizado via PUT',
-      content: 'Agora com conteúdo novo',
+      content: 'Agora com conteúdo new',
     };
 
     cy.request('PUT', `${BASE_URL}/${createdId}`, updatedPost).then((response) => {
